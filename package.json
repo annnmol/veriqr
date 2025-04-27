@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "veriqr",
+  "version": "1.0.0",
+  "workspaces": [
+    "web",
+    "mobile",
+    "server",
+    "features"
+  ],
+  "packageManager": "yarn@1.22.22"
+}
