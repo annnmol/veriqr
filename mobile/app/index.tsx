@@ -11,5 +11,5 @@ export default function RootIndex() {
 
   if (isSignedIn) return <Redirect href={"/(protected)/home"} />;
 
-  return <Redirect href={"/(auth)/sign-in"} />;
+  return <Redirect href={"/(auth)/sign-in-mobile"} />;
 }

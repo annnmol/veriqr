@@ -12,24 +12,21 @@ import {
 const Screen = () => {
   const router = useRouter();
 
-  const [fullName, setFullName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState("");
 
-  const { signupWithEmailPass, verifyEmailOTP } = useAuthService();
+  const {signupWithSMS, verifySMSOTP } =
+    useAuthService();
 
   // Handle submission of sign-up form
   const onSignUpPress = async () => {
-    if (!emailAddress || !password) {
-      console.log("Email or password is empty");
+    if (!phoneNumber) {
+      console.log("Phone number is empty");
       return;
     }
-    signupWithEmailPass({
-      emailAddress,
-      password,
-      firstName: fullName,
+    signupWithSMS({
+      phoneNumber: "+91" + phoneNumber,
     })
       .then((res) => {
         setPendingVerification(true);
@@ -42,7 +39,7 @@ const Screen = () => {
 
   // Handle submission of verification form
   const onVerifyPress = async () => {
-    verifyEmailOTP({
+    verifySMSOTP({
       code,
     })
       .then((res) => {
@@ -58,12 +55,15 @@ const Screen = () => {
   if (pendingVerification) {
     return (
       <>
-        <Text>Verify your email</Text>
+        <Text>Verify your Phone</Text>
         <TextInput
           value={code}
           placeholder="Enter your verification code"
           onChangeText={(code) => setCode(code)}
           style={styles.input}
+          autoComplete="sms-otp" // android
+          textContentType="oneTimeCode" // ios
+          keyboardType="number-pad"
         />
         <TouchableOpacity onPress={onVerifyPress}>
           <Text>Verify</Text>
@@ -77,31 +77,18 @@ const Screen = () => {
         <Text>Sign up</Text>
         <TextInput
           autoCapitalize="none"
-          value={fullName}
-          placeholder="Enter name"
-          onChangeText={(text) => setFullName(text)}
+          value={phoneNumber}
+          placeholder="Enter Mobile"
+          onChangeText={(text) => setPhoneNumber(text)}
           style={styles.input}
-        />
-        <TextInput
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Enter email"
-          onChangeText={(text) => setEmailAddress(text)}
-          style={styles.input}
-        />
-        <TextInput
-          value={password}
-          placeholder="Enter password"
-          secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
+          keyboardType="number-pad"
         />
         <TouchableOpacity onPress={onSignUpPress}>
           <Text>Continue</Text>
         </TouchableOpacity>
         <View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
           <Text>Already have an account?</Text>
-          <Link href="/(auth)/sign-in">
+          <Link href="/(auth)/sign-in-mobile">
             <Text>Sign in</Text>
           </Link>
         </View>

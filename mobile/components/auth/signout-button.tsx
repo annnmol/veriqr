@@ -9,7 +9,7 @@ const SignOutButton = () => {
   const handleSignOut = async () => {
     try {
       await logout();
-      router.replace("/(auth)/sign-in");
+      router.replace("/(auth)/sign-in-mobile");
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
     }

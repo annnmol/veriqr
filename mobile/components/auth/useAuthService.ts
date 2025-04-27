@@ -147,6 +147,135 @@ function useAuthService() {
   };
 
   /**
+   * Sign up user with phone, and initiate sms verification.
+   */
+  const signupWithSMS = async ({
+    phoneNumber,
+  }: {
+    phoneNumber: string;
+  }): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+      if (!isSignUpLoaded) return reject(new Error("Sign-up not ready"));
+      try {
+        // Start sign-up process using email and password provided
+        const result = await signUp?.create({
+          firstName: phoneNumber,
+          phoneNumber: phoneNumber,
+        });
+
+        console.log(
+          `🚀 ~ returnnewPromise ~ result:`,
+          result?.status,
+          result?.requiredFields
+        );
+        console.log(`🚀 ~ returnnewPromise ~ result:full`, result);
+
+        // if (result.status !== "complete") {
+        //   return reject(new Error("Sign-up not complete"));
+        // }
+        // Send user an email with verification code
+        await signUp.preparePhoneNumberVerification({
+          strategy: "phone_code",
+        });
+
+        resolve(result);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  /**
+   * Verify email with the OTP code sent during signup.
+   */
+  const verifySMSOTP = ({ code }: VerifyParams): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+      if (!isSignUpLoaded) return reject(new Error("Sign-up not ready"));
+
+      try {
+        // Use the code the user provided to attempt verification
+        const verified = await signUp.attemptPhoneNumberVerification({
+          code,
+        });
+
+        // If verification was completed, set the session to active
+        if (verified.status === "complete") {
+          await setActive({ session: verified?.createdSessionId });
+          resolve(verified);
+        } else {
+          // Verification failed.
+          console.error(JSON.stringify(verified, null, 2));
+          reject(new Error("Verification not complete"));
+        }
+        resolve(verified);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  /**
+   * Sign in user with phone number.
+   */
+  const signInWithSMS = ({
+    phoneNumber,
+  }: {
+    phoneNumber: string;
+  }): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+      if (!isSignInLoaded) return reject(new Error("Sign-in not ready"));
+      console.log(`🚀 ~ signInWithSMS ~ phoneNumber:`, phoneNumber);
+      try {
+        const result = await signIn?.create({
+          identifier: phoneNumber,
+          strategy: "phone_code",
+        });
+
+        console.log(`🚀 ~ returnnewPromise ~ result:`, result);
+
+        // if (result.status !== "complete") {
+        //   return reject(new Error("Sign-in not complete"));
+        // }
+
+        // await setActiveLogin({ session: result.createdSessionId });
+        resolve(result);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  /**
+   * Verify sms with the OTP code sent during login.
+   */
+  const verifySMSOTPLogin = ({ code }: VerifyParams): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+      if (!isSignInLoaded) return reject(new Error("Sign-up not ready"));
+
+      try {
+        // Use the code the user provided to attempt verification
+        const verified = await signIn.attemptFirstFactor({
+          strategy: "phone_code",
+          code,
+        });
+
+        // If verification was completed, set the session to active
+        if (verified.status === "complete") {
+          await setActiveLogin({ session: verified?.createdSessionId });
+          resolve(verified);
+        } else {
+          // Verification failed.
+          console.error(JSON.stringify(verified, null, 2));
+          reject(new Error("Verification not complete"));
+        }
+        resolve(verified);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  /**
    * Update password for logged-in user.
    */
   const updatePassword = ({
@@ -230,6 +359,10 @@ function useAuthService() {
     signupWithEmailPass,
     verifyEmailOTP,
     signInWithEmailPass,
+    signupWithSMS,
+    verifySMSOTP,
+    signInWithSMS,
+    verifySMSOTPLogin,
     logout,
     updatePassword,
     resetPasswordRequest,
