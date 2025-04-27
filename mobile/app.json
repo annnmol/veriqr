@@ -34,10 +34,32 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true
+          }
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e10bc5ac-0fd9-48c6-91af-088bff2a160c"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/e10bc5ac-0fd9-48c6-91af-088bff2a160c"
     }
   }
 }

@@ -1,0 +1,42 @@
+{
+  "cli": {
+    "version": ">= 15.0.10",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development"
+    },
+    "preview": {
+      "autoIncrement": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "preview",
+      "env": {
+        "EXPO_APP_ENV": "preview",
+        "EXPO_PUBLIC_PRODUCT_NAME": "veriqr",
+        "EXPO_PUBLIC_SERVER_BASE_URL": "http://localhost:5000/",
+        "EXPO_PUBLIC_CDN_BUCKET_PUBLIC_ASSETS_BASE_URL": "https://cdn.veriqr.com/",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_Z3JlYXQtbW9sbHVzay04My5jbGVyay5hY2NvdW50cy5kZXYk"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "channel": "production",
+      "env": {
+        "EXPO_APP_ENV": "production",
+        "EXPO_PUBLIC_PRODUCT_NAME": "veriqr",
+        "EXPO_PUBLIC_SERVER_BASE_URL": "http://localhost:5000/",
+        "EXPO_PUBLIC_CDN_BUCKET_PUBLIC_ASSETS_BASE_URL": "https://cdn.veriqr.com/",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_Z3JlYXQtbW9sbHVzay04My5jbGVyay5hY2NvdW50cy5kZXYk"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
