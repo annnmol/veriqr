@@ -82,6 +82,7 @@ const Screen = () => {
           onChangeText={(text) => setPhoneNumber(text)}
           style={styles.input}
           keyboardType="number-pad"
+          textContentType="telephoneNumber" // ios
         />
         <TouchableOpacity onPress={onSignUpPress}>
           <Text>Continue</Text>
